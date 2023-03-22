@@ -8,7 +8,31 @@ module.exports = {
   remove
 }
 
-function findPosts(user_id) {
+async function findPosts(user_id) {
+
+  const rows = await db('posts as p')
+    .select('p.id as post_id', 'contents', 'username')
+    .join('users as u', 'p.user_id', '=', 'u.id')
+    .where('')
+
+
+  /* 
+  select
+    p.id as post_id,
+    contents,
+    username
+    from posts as p  <<<THE POSTS IS CLOSER TO THE 'from' SO IT IS THE LEFT CENTERED TABLE
+    join users as u
+      on p.user_id = u.id
+    where u.id = 3;
+    
+    THIS ABOUT IS THE RAW SQLlite ABOVE YOU ARE JUST WRITING IT IN 
+    KNEX USING THE RAW SQL.
+  
+  
+  */
+
+
   /*
     Implement so it resolves this structure:
 
