@@ -61,10 +61,13 @@ async function findPosts(user_id) {
 async function find() {
   
   const rows = await db('users as u')//<<<<put the table you want to be the left one here
-    .join('posts as p', 'u.id', '=', 'p.user_id')
+    .leftJoin('posts as p', 'u.id', '=', 'p.user_id') //<<< need to use a leftJoin instead of just a join
+    //becuase otherwise the philosopher without any posts would not be found
     .count('p.id as post_count')
     .groupBy('u.id')
     .select('u.id as user_id', 'username')
+
+    return rows
 
 
 
@@ -102,8 +105,36 @@ async function find() {
   */
 }
 
-function findById(id) {
-  return db('users').where({ id }).first()
+async function findById(id) {
+  
+  const rows = await db('users as u')
+    .leftJoin('posts as p', 'u.id', 'p.user_id')
+    .select('u.id as user_id', 'username', 'contents', 'p.id as post_id')
+    .where('u.id', id)
+
+    let result = rows.reduce((acc, row) => {
+      if (row.contents) {
+        acc.posts.push(row)
+      }
+
+      return acc
+      
+    }, { user_id: rows[0].user_id, username: row[0].username, posts: [] }) //<<< learn about accumlulatorss
+
+
+    return result
+  /*
+  select
+    u.id as user_id
+    username,
+    contents,
+    p.id as post_id
+  from users as u
+  left join posts as p
+    u.id = p.user_id
+  where u.id = 1;    
+  */
+
   /*
     Improve so it resolves this structure:
 
