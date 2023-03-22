@@ -114,12 +114,14 @@ async function findById(id) {
 
     let result = rows.reduce((acc, row) => {
       if (row.contents) {
-        acc.posts.push(row)
+        acc.posts.push({contents: row.contents, post_id: row.post_id})
       }
 
       return acc
-      
-    }, { user_id: rows[0].user_id, username: row[0].username, posts: [] }) //<<< learn about accumlulatorss
+
+    }, { user_id: rows[0].user_id, username: row[0].username, posts: [] }) //<<< learn about accumlulatorss 
+    //and here we are using raw JS to change things to make it
+    //the shape that we wanted
 
 
     return result
