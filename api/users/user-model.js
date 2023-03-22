@@ -8,6 +8,15 @@ module.exports = {
   remove
 }
 
+
+
+//MOCK THESE OUT IN SQL FIRST TO FIND OUT 
+//HOW TO GET IT ALL TO WORK
+
+//IF YOU CANT ACCESS SOMETHING SOMETIMES MAYBE TRY
+//USING A DIFFERENT KIND OF JOIN
+
+
 async function findPosts(user_id) {
 
   const rows = await db('posts as p')
@@ -29,6 +38,7 @@ async function findPosts(user_id) {
     
     THIS ABOUT IS THE RAW SQLlite ABOVE YOU ARE JUST WRITING IT IN 
     KNEX USING THE RAW SQL.
+    YOU MAY WANT TO BE 
   
   
   */
@@ -48,8 +58,31 @@ async function findPosts(user_id) {
   */
 }
 
-function find() {
-  return db('users')
+async function find() {
+  
+  const rows = await db('users as u')//<<<<put the table you want to be the left one here
+    .join('posts as p', 'u.id', '=', 'p.user_id')
+    .count('p.id as post_count')
+    .groupBy('u.id')
+    .select('u.id as user_id', 'username')
+
+
+
+  /*
+  
+  select
+    u.id as user_id,
+    username,
+    count(p.id) as post_count
+  from users as u
+  left join posts as p
+    on u.id = p.user_id
+  group by u.id;
+  
+  */
+
+
+
   /*
     Improve so it resolves this structure:
 
