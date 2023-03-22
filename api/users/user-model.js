@@ -13,8 +13,9 @@ async function findPosts(user_id) {
   const rows = await db('posts as p')
     .select('p.id as post_id', 'contents', 'username')
     .join('users as u', 'p.user_id', '=', 'u.id')
-    .where('')
+    .where('u.id', user_id)
 
+    return rows
 
   /* 
   select
